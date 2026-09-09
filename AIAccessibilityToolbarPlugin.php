@@ -38,14 +38,14 @@ if ( ! function_exists( 'ai_toolbar_user_can_summarize' ) ) {
 	 * @return bool
 	 */
 	function ai_toolbar_user_can_summarize() {
-			$capability = trim( (string) apply_filters( 'ai_toolbar_summarize_capability', 'read' ) );
-			if ( '' === $capability ) {
-				$capability = 'read';
-			}
-
-			return is_user_logged_in() && current_user_can( $capability );
+		$capability = trim( (string) apply_filters( 'ai_toolbar_summarize_capability', 'read' ) );
+		if ( '' === $capability ) {
+			$capability = 'read';
 		}
+
+		return is_user_logged_in() && current_user_can( $capability );
 	}
+}
 
 // Load the front-end asset loader (defines ai_toolbar_enqueue_assets()).
 require_once AI_TOOLBAR_DIR . 'WidgetAssetsLoader.php';
