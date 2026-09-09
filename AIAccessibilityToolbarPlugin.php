@@ -38,11 +38,14 @@ if ( ! function_exists( 'ai_toolbar_user_can_summarize' ) ) {
 	 * @return bool
 	 */
 	function ai_toolbar_user_can_summarize() {
-		$capability = apply_filters( 'ai_toolbar_summarize_capability', 'read' );
+			$capability = trim( (string) apply_filters( 'ai_toolbar_summarize_capability', 'read' ) );
+			if ( '' === $capability ) {
+				$capability = 'read';
+			}
 
-		return is_user_logged_in() && current_user_can( $capability );
+			return is_user_logged_in() && current_user_can( $capability );
+		}
 	}
-}
 
 // Load the front-end asset loader (defines ai_toolbar_enqueue_assets()).
 require_once AI_TOOLBAR_DIR . 'WidgetAssetsLoader.php';
@@ -227,7 +230,7 @@ function ai_toolbar_rest_permission_check( WP_REST_Request $request ) {
 	if ( ! ai_toolbar_user_can_summarize() ) {
 		return new WP_Error(
 			'rest_forbidden',
-			__( 'You must be logged in to use this feature.', 'ai-accessibility-toolbar' ),
+			__( 'You are not authorized to use this feature.', 'ai-accessibility-toolbar' ),
 			array( 'status' => 403 )
 		);
 	}
