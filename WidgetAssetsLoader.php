@@ -79,17 +79,20 @@ if ( ! function_exists( 'ai_toolbar_enqueue_assets' ) ) {
 		);
 
 		$max_input = defined( 'AI_TOOLBAR_MAX_INPUT' ) ? (int) AI_TOOLBAR_MAX_INPUT : 12000;
+		$can_summarize = function_exists( 'ai_toolbar_user_can_summarize' ) && ai_toolbar_user_can_summarize();
 
 		$config = array(
-			'endpoint' => esc_url_raw( rest_url( 'ai-toolbar/v1/summarize' ) ),
-			'nonce'    => wp_create_nonce( 'wp_rest' ),
-			'maxInput' => $max_input,
-			'i18n'     => array(
+			'endpoint'     => $can_summarize ? esc_url_raw( rest_url( 'ai-toolbar/v1/summarize' ) ) : '',
+			'nonce'        => $can_summarize ? wp_create_nonce( 'wp_rest' ) : '',
+			'maxInput'     => $max_input,
+			'canSummarize' => $can_summarize,
+			'i18n'         => array(
 				'processing'  => __( '✨ AI is reading and processing this page…', 'ai-accessibility-toolbar' ),
 				'summary'     => __( '📝 Webpage Summary:', 'ai-accessibility-toolbar' ),
 				'requestFail' => __( 'Request failed.', 'ai-accessibility-toolbar' ),
 				'connError'   => __( '❌ Connection error contacting the API endpoint.', 'ai-accessibility-toolbar' ),
 				'rateLimited' => __( '⏳ Too many requests — please try again shortly.', 'ai-accessibility-toolbar' ),
+				'authRequired'=> __( '🔒 Please sign in to use page summarization.', 'ai-accessibility-toolbar' ),
 			),
 		);
 

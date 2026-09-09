@@ -31,6 +31,19 @@ define( 'AI_TOOLBAR_MAX_INPUT', 12000 );
 define( 'AI_TOOLBAR_RATE_LIMIT', 5 );   // Requests per rate-limit window.
 define( 'AI_TOOLBAR_RATE_WINDOW', 60 );  // Seconds in the rate-limit window.
 
+if ( ! function_exists( 'ai_toolbar_user_can_summarize' ) ) {
+	/**
+	 * Determine whether the current visitor may use the AI summarize feature.
+	 *
+	 * @return bool
+	 */
+	function ai_toolbar_user_can_summarize() {
+		$capability = apply_filters( 'ai_toolbar_summarize_capability', 'read' );
+
+		return is_user_logged_in() && current_user_can( $capability );
+	}
+}
+
 // Load the front-end asset loader (defines ai_toolbar_enqueue_assets()).
 require_once AI_TOOLBAR_DIR . 'WidgetAssetsLoader.php';
 
@@ -211,6 +224,14 @@ add_action(
  * @return true|WP_Error True if access is allowed, WP_Error otherwise.
  */
 function ai_toolbar_rest_permission_check( WP_REST_Request $request ) {
+	if ( ! ai_toolbar_user_can_summarize() ) {
+		return new WP_Error(
+			'rest_forbidden',
+			__( 'You must be logged in to use this feature.', 'ai-accessibility-toolbar' ),
+			array( 'status' => 403 )
+		);
+	}
+
 	$nonce = $request->get_header( 'x_wp_nonce' );
 	if ( ! $nonce ) {
 		$nonce = $request->get_param( '_wpnonce' );
@@ -510,9 +531,11 @@ function ai_toolbar_inject_widget() {
 		hidden>
 		<h3>✨ <?php esc_html_e( 'Site Accessibility', 'ai-accessibility-toolbar' ); ?></h3>
 
-		<button type="button" class="ai-widget-btn ai-primary-btn" id="wpSummarizeBtn">
-			📝 <?php esc_html_e( 'Summarize Page Content', 'ai-accessibility-toolbar' ); ?>
-		</button>
+		<?php if ( ai_toolbar_user_can_summarize() ) : ?>
+			<button type="button" class="ai-widget-btn ai-primary-btn" id="wpSummarizeBtn">
+				📝 <?php esc_html_e( 'Summarize Page Content', 'ai-accessibility-toolbar' ); ?>
+			</button>
+		<?php endif; ?>
 
 		<hr class="ai-widget-divider" aria-hidden="true">
 
@@ -534,4 +557,3 @@ function ai_toolbar_inject_widget() {
 	</div>
 	<?php
 }
-
