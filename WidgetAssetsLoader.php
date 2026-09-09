@@ -92,7 +92,7 @@ if ( ! function_exists( 'ai_toolbar_enqueue_assets' ) ) {
 				'requestFail' => __( 'Request failed.', 'ai-accessibility-toolbar' ),
 				'connError'   => __( '❌ Connection error contacting the API endpoint.', 'ai-accessibility-toolbar' ),
 				'rateLimited' => __( '⏳ Too many requests — please try again shortly.', 'ai-accessibility-toolbar' ),
-				'authRequired'=> __( '🔒 Please sign in to use page summarization.', 'ai-accessibility-toolbar' ),
+				'authRequired' => __( '🔒 Please sign in to use page summarization.', 'ai-accessibility-toolbar' ),
 			),
 		);
 

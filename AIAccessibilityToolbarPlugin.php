@@ -218,7 +218,7 @@ add_action(
 
 
 /**
- * REST permission check — enforces a valid WP REST nonce.
+ * REST permission check — requires an authorized logged-in user and a valid WP REST nonce.
  *
  * @param WP_REST_Request $request The REST request object.
  * @return true|WP_Error True if access is allowed, WP_Error otherwise.
