@@ -10,3 +10,7 @@ AI Accessibility Plugin for WordPress, based on the Google Chrome extension. Inc
 ## Gemini Api Key Needed
 1. Please do not use the Gemini API keys used in this repository.
 2. You can register for a Gemini API key to replace those in the repositpory by visiting...
+
+## Security Notes
+1. The AI page summarization feature now requires a logged-in WordPress user.
+2. This prevents anonymous visitors from using the site's stored Gemini API key through the public widget.

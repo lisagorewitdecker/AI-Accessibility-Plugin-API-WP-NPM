@@ -74,6 +74,11 @@
         var summarizeBtn = document.getElementById('wpSummarizeBtn');
         if (summarizeBtn) {
             summarizeBtn.addEventListener('click', async function () {
+                if (config.canSummarize === false) {
+                    showToast(i18n.authRequired || 'Please sign in to use this feature.');
+                    return;
+                }
+
                 // Guard against rapid double-clicks that would waste rate-limit budget.
                 if (summarizeBtn.disabled) {
                     return;
